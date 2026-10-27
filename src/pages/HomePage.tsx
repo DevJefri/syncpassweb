@@ -10,6 +10,21 @@ function formatDateTime(iso?: string) {
   }
 }
 
+function formatDuration(ms: number) {
+  if (ms < 0) ms = 0
+  const totalSeconds = Math.floor(ms / 1000)
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  if (hours > 0) {
+    return `${hours}h ${minutes}m ${seconds}s`
+  }
+  if (minutes > 0) {
+    return `${minutes}m ${seconds}s`
+  }
+  return `${seconds}s`
+}
+
 export default function HomePage() {
   const { user, loading, error, login, logout } = useAuth()
 
@@ -19,6 +34,7 @@ export default function HomePage() {
     const role = user.role || (user.groups && user.groups.length > 0 ? user.groups.join(', ') : 'Sin rol asignado')
     const sessionDate = formatDateTime(user.loginAt)
     const now = new Date().toLocaleString('es-ES')
+    const connectionDuration = user.loginAt ? formatDuration(Date.now() - new Date(user.loginAt).getTime()) : '-'
 
     return (
       <section>
@@ -60,6 +76,10 @@ export default function HomePage() {
             <div>
               <dt className="text-sm text-ink/60">Fecha y hora de inicio de sesión</dt>
               <dd className="mt-1 font-semibold">{sessionDate}</dd>
+            </div>
+            <div>
+              <dt className="text-sm text-ink/60">Tiempo de conexión</dt>
+              <dd className="mt-1 font-semibold">{connectionDuration}</dd>
             </div>
             <div>
               <dt className="text-sm text-ink/60">Fecha y hora actual</dt>
