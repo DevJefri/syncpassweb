@@ -86,7 +86,7 @@ export default function HomePage() {
               <dd className="mt-1 font-semibold">{now}</dd>
             </div>
           </dl>
-        </div>
+        </div> 
 
         <ApiStatus />
       </section>
